@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("org.jetbrains.kotlin.kapt")
+
+    id("com.google.devtools.ksp")
 }
 
 
@@ -61,10 +63,8 @@ dependencies {
     //Navigation component
     //implementation("androidx.room:room-runtime:2.5.2")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.2")
-
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:2.7.2")
-
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:2.7.2")
 
@@ -73,14 +73,8 @@ dependencies {
     val room_version = "2.5.2"
 
     implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
 
-    // To use Kotlin annotation processing tool (kapt)
-   kapt("androidx.room:room-compiler:$room_version")
-    //annotationProcessor ("androidx.room:room-compiler:$room_version")
-    kapt("androidx.room:room-runtime:2.5.2")
-    // To use Kotlin Symbol Processing (KSP)
-    //ksp("androidx.room:room-compiler:$room_version")
+    ksp("androidx.room:room-compiler:2.5.2")
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
