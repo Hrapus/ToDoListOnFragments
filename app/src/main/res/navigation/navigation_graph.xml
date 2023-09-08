@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/addNewNoteFragment"
-        android:name="com.example.todolistonfragments.screen.AddNewNoteFragment"
+        android:name="com.example.todolistonfragments.screen.add_new_note.AddNewNoteFragment"
         android:label="fragment_add_new_note"
         tools:layout="@layout/fragment_add_new_note">
         <action
