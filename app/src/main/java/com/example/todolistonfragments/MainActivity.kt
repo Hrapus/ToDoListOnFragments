@@ -11,23 +11,30 @@ import com.example.todolistonfragments.utilities.APP_ACTIVITY
 
 class MainActivity : AppCompatActivity() {
 
+
     lateinit var mToolbar: Toolbar
     lateinit var mNavController: NavController
-    private lateinit var binding: ActivityMainBinding
+
+    private var _binding: ActivityMainBinding? = null
+    private val mBinding get() = _binding!!
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mBinding.root)
         APP_ACTIVITY = this
-        mToolbar = binding.toolbar
+        mToolbar = mBinding.toolbar
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         mNavController = navHostFragment.navController
-
         //mNavController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setSupportActionBar(mToolbar)
         title = "Notes"
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

@@ -14,15 +14,16 @@ import com.example.todolistonfragments.utilities.TYPE_ROOM
 
 class StartFragment : Fragment() {
 
-    private lateinit var binding: FragmentStartBinding
+    private var _binding: FragmentStartBinding? = null
+    private val mBinding get() = _binding!!
     private lateinit var mViewModel: StartFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentStartBinding.inflate(layoutInflater, container, false)
-        return binding.root
+        _binding = FragmentStartBinding.inflate(layoutInflater, container, false)
+        return mBinding.root
     }
 
     override fun onStart() {
@@ -32,7 +33,7 @@ class StartFragment : Fragment() {
 
     private fun initialization() {
         mViewModel = ViewModelProvider(this)[StartFragmentViewModel::class.java]
-        binding.btnRoom.setOnClickListener{
+        mBinding.btnRoom.setOnClickListener{
             mViewModel.initDatabase(TYPE_ROOM){
                 APP_ACTIVITY.mNavController.navigate(R.id.action_startFragment_to_mainFragment)
             }

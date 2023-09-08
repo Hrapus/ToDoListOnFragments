@@ -12,6 +12,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        viewBinding.enable = true
         applicationId = "com.example.todolistonfragments"
         minSdk = 24
         targetSdk = 33
