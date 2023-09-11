@@ -8,6 +8,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +23,7 @@ import com.example.todolistonfragments.screen.main.MainFragmentViewModel
 import com.example.todolistonfragments.utilities.APP_ACTIVITY
 
 
-class NoteFragment : Fragment() {
+class NoteFragment : Fragment(), MenuProvider {
 
     private var _binding: FragmentNoteBinding? = null
     private val mBinding get() = _binding!!
@@ -31,6 +34,10 @@ class NoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         // Inflate the layout for this fragment
         _binding = FragmentNoteBinding.inflate(layoutInflater, container, false)
         mCurrentNote = arguments?.getSerializable("note") as AppNote
@@ -43,17 +50,22 @@ class NoteFragment : Fragment() {
     }
 
     private fun initialisation() {
-        setHasOptionsMenu(true)
         mBinding.noteName.text = mCurrentNote.name
         mBinding.noteText.text = mCurrentNote.text
         mViewModel = ViewModelProvider(this)[NoteFragmentViewModel::class.java]
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.note_action_menu, menu)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.note_action_menu, menu)
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.btn_delete -> {
                 mViewModel.delete(mCurrentNote){
@@ -61,12 +73,7 @@ class NoteFragment : Fragment() {
                 }
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        return true
     }
 
 
