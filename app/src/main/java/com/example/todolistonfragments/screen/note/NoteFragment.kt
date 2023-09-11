@@ -1,7 +1,6 @@
 package com.example.todolistonfragments.screen.note
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,16 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import com.example.todolistonfragments.R
-import com.example.todolistonfragments.databinding.FragmentMainBinding
 import com.example.todolistonfragments.databinding.FragmentNoteBinding
 import com.example.todolistonfragments.models.AppNote
-import com.example.todolistonfragments.screen.main.MainAdapter
-import com.example.todolistonfragments.screen.main.MainFragmentViewModel
 import com.example.todolistonfragments.utilities.APP_ACTIVITY
 
 
@@ -33,7 +28,7 @@ class NoteFragment : Fragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
