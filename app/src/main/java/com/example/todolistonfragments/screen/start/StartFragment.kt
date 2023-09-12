@@ -37,6 +37,7 @@ class StartFragment : Fragment() {
 
     private fun initialization() {
         mViewModel = ViewModelProvider(this)[StartFragmentViewModel::class.java]
+
         mBinding.btnRoom.setOnClickListener {
             mViewModel.initDatabase(TYPE_ROOM) {
                 APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
@@ -53,8 +54,7 @@ class StartFragment : Fragment() {
                     EMAIL = inputEmail
                     PASSWORD = inputPassword
                     mViewModel.initDatabase(TYPE_FIREBASE) {
-                        showToast("INIT OK")
-                        //APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
+                        APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
                     }
                 } else {
                     showToast("Введите пароль и адрес")
