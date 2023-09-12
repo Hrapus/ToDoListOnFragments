@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "727077187236",
+    "firebase_url": "https://notes-85c97-default-rtdb.firebaseio.com",
+    "project_id": "notes-85c97",
+    "storage_bucket": "notes-85c97.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727077187236:android:5282cf955fdd08338b0031",
+        "android_client_info": {
+          "package_name": "com.example.todolistonfragments"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBQxTXXo5aTUq-HVhNf7LGbSry8GEau3M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
