@@ -3,54 +3,60 @@ package com.example.todolistonfragments.database.firebase
 import androidx.lifecycle.LiveData
 import com.example.todolistonfragments.database.DataBaseRepository
 import com.example.todolistonfragments.models.AppNote
+import com.example.todolistonfragments.utilities.AUTH
+import com.example.todolistonfragments.utilities.CURRENT_ID
 import com.example.todolistonfragments.utilities.EMAIL
 import com.example.todolistonfragments.utilities.ID_FIREBASE
 import com.example.todolistonfragments.utilities.NAME
 import com.example.todolistonfragments.utilities.PASSWORD
+import com.example.todolistonfragments.utilities.REF_DATABASE
 import com.example.todolistonfragments.utilities.TEXT
 import com.example.todolistonfragments.utilities.showToast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
-class AppFirebaseRepository: DataBaseRepository {
-
-    private val mAuth = FirebaseAuth.getInstance()
-
-    private val mDatabaseReference = FirebaseDatabase.getInstance().reference
-        .child(mAuth.currentUser?.uid.toString())
+class AppFirebaseRepository : DataBaseRepository {
+    init {
+        AUTH = FirebaseAuth.getInstance()
+    }
 
     override val allNotes: LiveData<List<AppNote>> = AllNotesLiveData()
 
     override suspend fun insert(note: AppNote, onSuccess: () -> Unit) {
-        val idNote = mDatabaseReference.push().key.toString()
-        val mapNote = hashMapOf<String,Any>()
+        val idNote = REF_DATABASE.push().key.toString()
+        val mapNote = hashMapOf<String, Any>()
         mapNote[ID_FIREBASE] = idNote
         mapNote[NAME] = note.name
         mapNote[TEXT] = note.text
 
-        mDatabaseReference.child(idNote)
+        REF_DATABASE.child(idNote)
             .updateChildren(mapNote)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { showToast(it.message.toString()) }
+    }
+
+    override suspend fun delete(note: AppNote, onSuccess: () -> Unit) {
+        REF_DATABASE.child(note.idFirebase).removeValue()
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener{ showToast(it.message.toString()) }
     }
 
-    override suspend fun delete(note: AppNote, onSuccess: () -> Unit) {
-        TODO("Not yet implemented")
-    }
-
     override fun connectToDataBase(onSuccess: () -> Unit, onFail: (String) -> Unit) {
-        mAuth.signInWithEmailAndPassword(EMAIL, PASSWORD)
+        AUTH.signInWithEmailAndPassword(EMAIL, PASSWORD)
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener{
-                mAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD)
+            .addOnFailureListener {
+                AUTH.createUserWithEmailAndPassword(EMAIL, PASSWORD)
                     .addOnSuccessListener { onSuccess() }
-                    .addOnFailureListener{
+                    .addOnFailureListener {
                         onFail(it.message.toString())
                     }
             }
+        CURRENT_ID = AUTH.currentUser?.uid.toString()
+        REF_DATABASE = FirebaseDatabase.getInstance().reference
+            .child(CURRENT_ID)
     }
 
     override fun signOut() {
-        mAuth.signOut()
+        AUTH.signOut()
     }
 }

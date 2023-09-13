@@ -2,7 +2,12 @@ package com.example.todolistonfragments.utilities
 
 import com.example.todolistonfragments.MainActivity
 import com.example.todolistonfragments.database.DataBaseRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 
+lateinit var AUTH: FirebaseAuth
+lateinit var CURRENT_ID: String
+lateinit var REF_DATABASE: DatabaseReference
 lateinit var REPOSITORY: DataBaseRepository
 lateinit var APP_ACTIVITY: MainActivity
 const val TYPE_DATABASE = "type_database"
