@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.todolistonfragments.R
 import com.example.todolistonfragments.databinding.FragmentStartBinding
 import com.example.todolistonfragments.utilities.APP_ACTIVITY
+import com.example.todolistonfragments.utilities.AppPreferences
 import com.example.todolistonfragments.utilities.EMAIL
 import com.example.todolistonfragments.utilities.PASSWORD
 import com.example.todolistonfragments.utilities.TYPE_FIREBASE
@@ -32,14 +33,23 @@ class StartFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        initialization()
+        mViewModel = ViewModelProvider(this)[StartFragmentViewModel::class.java]
+
+        if (AppPreferences.getInitUser()){
+            mViewModel.initDatabase(AppPreferences.getTypeDb()) {
+                APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
+            }
+        } else{
+            initialization()
+        }
     }
 
     private fun initialization() {
-        mViewModel = ViewModelProvider(this)[StartFragmentViewModel::class.java]
 
         mBinding.btnRoom.setOnClickListener {
             mViewModel.initDatabase(TYPE_ROOM) {
+                AppPreferences.setInitUser(true)
+                AppPreferences.setTypeDb(TYPE_ROOM)
                 APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
             }
         }
@@ -54,6 +64,8 @@ class StartFragment : Fragment() {
                     EMAIL = inputEmail
                     PASSWORD = inputPassword
                     mViewModel.initDatabase(TYPE_FIREBASE) {
+                        AppPreferences.setInitUser(true)
+                        AppPreferences.setTypeDb(TYPE_FIREBASE)
                         APP_ACTIVITY.navController.navigate(R.id.action_startFragment_to_mainFragment)
                     }
                 } else {

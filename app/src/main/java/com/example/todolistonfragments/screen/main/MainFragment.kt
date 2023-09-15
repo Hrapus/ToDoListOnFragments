@@ -18,6 +18,7 @@ import com.example.todolistonfragments.R
 import com.example.todolistonfragments.databinding.FragmentMainBinding
 import com.example.todolistonfragments.models.AppNote
 import com.example.todolistonfragments.utilities.APP_ACTIVITY
+import com.example.todolistonfragments.utilities.AppPreferences
 
 
 class MainFragment : Fragment(), MenuProvider {
@@ -77,6 +78,7 @@ class MainFragment : Fragment(), MenuProvider {
         when(item.itemId){
             R.id.btn_exit -> {
                 mViewModel.signOut()
+                AppPreferences.setInitUser(false)
                 APP_ACTIVITY.navController.navigate(R.id.action_mainFragment_to_startFragment)
             }
         }

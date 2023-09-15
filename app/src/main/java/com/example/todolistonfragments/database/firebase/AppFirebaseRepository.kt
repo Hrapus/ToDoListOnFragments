@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.example.todolistonfragments.database.DataBaseRepository
 import com.example.todolistonfragments.models.AppNote
 import com.example.todolistonfragments.utilities.AUTH
+import com.example.todolistonfragments.utilities.AppPreferences
 import com.example.todolistonfragments.utilities.CURRENT_ID
 import com.example.todolistonfragments.utilities.EMAIL
 import com.example.todolistonfragments.utilities.ID_FIREBASE
@@ -38,23 +39,36 @@ class AppFirebaseRepository : DataBaseRepository {
     override suspend fun delete(note: AppNote, onSuccess: () -> Unit) {
         REF_DATABASE.child(note.idFirebase).removeValue()
             .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener{ showToast(it.message.toString()) }
+            .addOnFailureListener { showToast(it.message.toString()) }
     }
 
     override fun connectToDataBase(onSuccess: () -> Unit, onFail: (String) -> Unit) {
-        AUTH.signInWithEmailAndPassword(EMAIL, PASSWORD)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener {
-                AUTH.createUserWithEmailAndPassword(EMAIL, PASSWORD)
-                    .addOnSuccessListener { onSuccess() }
-                    .addOnFailureListener {
-                        onFail(it.message.toString())
-                    }
-            }
+        if (AppPreferences.getInitUser()) {
+            initRefs()
+            onSuccess()
+        } else {
+            AUTH.signInWithEmailAndPassword(EMAIL, PASSWORD)
+                .addOnSuccessListener {
+                    initRefs()
+                    onSuccess() }
+                .addOnFailureListener {
+                    AUTH.createUserWithEmailAndPassword(EMAIL, PASSWORD)
+                        .addOnSuccessListener {
+                            initRefs()
+                            onSuccess() }
+                        .addOnFailureListener {
+                            onFail(it.message.toString())
+                        }
+                }
+        }
+    }
+
+    private fun initRefs() {
         CURRENT_ID = AUTH.currentUser?.uid.toString()
         REF_DATABASE = FirebaseDatabase.getInstance().reference
             .child(CURRENT_ID)
     }
+
 
     override fun signOut() {
         AUTH.signOut()

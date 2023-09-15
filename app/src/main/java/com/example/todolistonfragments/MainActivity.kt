@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.todolistonfragments.databinding.ActivityMainBinding
 import com.example.todolistonfragments.utilities.APP_ACTIVITY
+import com.example.todolistonfragments.utilities.AppPreferences
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         //mNavController = Navigation.findNavController(this, R.id.nav_host_fragment)
         setSupportActionBar(mToolbar)
         title = "Notes"
+        AppPreferences.getPreferences(this)
     }
 
     override fun onDestroy() {
