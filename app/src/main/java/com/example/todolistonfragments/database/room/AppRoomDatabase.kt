@@ -9,7 +9,7 @@ import com.example.todolistonfragments.models.AppNote
 
 @Database(
     entities = [AppNote::class],
-    version = 1
+    version = 2
 )
 abstract class AppRoomDatabase: RoomDatabase() {
 
@@ -26,7 +26,9 @@ abstract class AppRoomDatabase: RoomDatabase() {
                     context,
                     AppRoomDatabase::class.java,
                     "database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 database as AppRoomDatabase
             } else database as AppRoomDatabase
 
